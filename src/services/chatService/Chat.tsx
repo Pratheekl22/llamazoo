@@ -8,6 +8,14 @@ export const chatAPIRequest = async (message: string, setMessages: React.Dispatc
         // Initialize the bot message placeholder
         const botMessage = { text: '', isUserMessage: false };
         setMessages(prevMessages => [...prevMessages, botMessage]);
+        const rawContext =  sessionStorage.getItem('context');
+        const parsedContext = () => {
+            if(rawContext) {
+                return JSON.parse(rawContext);
+            } else {
+                return []
+            }
+        }
 
         const response = await fetch('http://localhost:11434/api/generate', {
             method: 'POST',
@@ -17,6 +25,7 @@ export const chatAPIRequest = async (message: string, setMessages: React.Dispatc
             body: JSON.stringify({
                 model: 'llama3.1',
                 prompt: message,
+                context: parsedContext()
             }),
         });
 
@@ -54,6 +63,8 @@ export const chatAPIRequest = async (message: string, setMessages: React.Dispatc
                 }
 
                 if (json.done) {
+                    sessionStorage.setItem("context", JSON.stringify(json.context))
+                    console.log(json.context)
                     break; // Exit loop if done
                 }
             }
