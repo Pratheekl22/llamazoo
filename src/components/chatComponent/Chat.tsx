@@ -17,21 +17,26 @@ const Chat = () => {
     const chatContainerRef = useRef(null);
 
     useEffect(() => {
-        const chatContainer: HTMLDivElement | null = chatContainerRef.current;
-        if (chatContainer) {
-            const shouldScroll =
-                chatContainer.scrollHeight > chatContainer.clientHeight;
+        const chatContainer = chatContainerRef.current;
+        if (isDivElement(chatContainer)) {
+            // @ts-expect-error type error expected
+            const shouldScroll = chatContainer.scrollHeight > chatContainer.clientHeight;
             if (shouldScroll) {
+                // @ts-expect-error type error expected
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }
         }
     }, [messages]);
 
+    function isDivElement(element: HTMLDivElement | null): element is HTMLDivElement {
+        return element !== null;
+    }
+
     const handleLLMMessage = async (message: string) => {
         await chatAPIRequest(message, setMessages);
     };
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter') {
             if (event.shiftKey) {
                 // Allow new line
