@@ -1,25 +1,28 @@
 /* Message container */
 .message {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     padding: 8px 16px;
     margin-bottom: 8px;
     width: 90%; /* Adjusted to fit within container */
-    background-color: #f9f9f9; /* Background color for messages */
+    background-color: #ffffff; /* Background color for messages */
     align-items: flex-start;
+    border: 1px solid #ddd;
 }
 
 /* User message specific styles */
 .user-message {
     color: #000000F5;
     align-self: flex-start; /* Changed to flex-end for right alignment */
+    border-color: #2ed3f6;
 }
 
 /* Bot message specific styles */
 .bot-message {
     color: #000000F5;
     align-self: flex-start; /* Align to the left */
-    background-color: #ffffff; /* Background color for bot messages */
+    border-color: #dcf8c6;
 }
 
 /* Message label */
@@ -30,7 +33,7 @@
 
 /* Separator line */
 .human-message-separator {
-    background-color: #dcf8c6; /* Green line separator */
+    background-color: #007bff;
     margin: 8px 0;
     height: 2px;
     width: 100%;
@@ -38,7 +41,7 @@
 
 /* Separator line */
 .bot-message-separator {
-    background-color: #007bff; /* Green line separator */
+    background-color: #28a745;
     margin: 8px 0;
     height: 2px;
     width: 100%;

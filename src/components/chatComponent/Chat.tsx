@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import Message from '../messageComponent/Message';
@@ -13,6 +13,19 @@ interface Message {
 const Chat = () => {
     const [inputValue, setInputValue] = useState<string>('');
     const [messages, setMessages] = useState<Message[]>([]);
+
+    const chatContainerRef = useRef(null);
+
+    useEffect(() => {
+        const chatContainer: HTMLDivElement | null = chatContainerRef.current;
+        if (chatContainer) {
+            const shouldScroll =
+                chatContainer.scrollHeight > chatContainer.clientHeight;
+            if (shouldScroll) {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+    }, [messages]);
 
     const handleLLMMessage = async (message: string) => {
         await chatAPIRequest(message, setMessages);
@@ -35,7 +48,7 @@ const Chat = () => {
     return (
         <div className="chat-wrapper">
             <div className="chat-container">
-                <div className="chat-messages">
+                <div className="chat-messages" ref={chatContainerRef}>
                     {messages.map((message, index) => (
                         <Message key={index} text={message.text} isUserMessage={message.isUserMessage}/>
                     ))}
@@ -47,7 +60,6 @@ const Chat = () => {
                     fullWidth
                     multiline
                     minRows={1}
-                    maxRows={4}
                     id="outlined-basic"
                     label="Chat with a LLaMA"
                     variant="outlined"
