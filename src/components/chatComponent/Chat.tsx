@@ -3,7 +3,7 @@ import { IconButton, InputAdornment, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import Message from '../messageComponent/Message';
 import './Chat.css';
-import { chatAPIRequest } from '../../services/chatService/Chat';
+import { chatAPIRequest } from "../../services/chatService/Chat.tsx";
 
 interface Message {
     text: string;
@@ -18,10 +18,17 @@ const Chat = () => {
         await chatAPIRequest(message, setMessages);
     };
 
-    const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter') {
-            handleLLMMessage(inputValue);
-            setInputValue('');
+            if (event.shiftKey) {
+                // Allow new line
+                return;
+            } else {
+                // Prevent default behavior (e.g., adding a new line) and send the message
+                event.preventDefault();
+                handleLLMMessage(inputValue);
+                setInputValue('');
+            }
         }
     };
 
@@ -30,7 +37,7 @@ const Chat = () => {
             <div className="chat-container">
                 <div className="chat-messages">
                     {messages.map((message, index) => (
-                        <Message key={index} text={message.text} isUserMessage={message.isUserMessage} />
+                        <Message key={index} text={message.text} isUserMessage={message.isUserMessage}/>
                     ))}
                 </div>
             </div>
@@ -38,10 +45,13 @@ const Chat = () => {
                 <TextField
                     className="search-bar"
                     fullWidth
+                    multiline
+                    minRows={1}
+                    maxRows={4}
                     id="outlined-basic"
                     label="Chat with a LLaMA"
                     variant="outlined"
-                    onKeyDown={handleEnterPress}
+                    onKeyDown={handleKeyDown}
                     onChange={(e) => setInputValue(e.target.value)}
                     value={inputValue}
                     InputProps={{

@@ -47,4 +47,6 @@
 /* Message text */
 .message-text {
     word-wrap: break-word;
+    white-space: pre-wrap; /* Preserve whitespace and line breaks */
+    text-align: left;
 }
